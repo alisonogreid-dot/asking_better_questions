@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asking Better Questions — Vanishing Points Week 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0D1117;
+  --surface: #161B22;
+  --surface2: #1C2333;
+  --border: rgba(255,255,255,0.06);
+  --text: #E6EDF3;
+  --muted: #8B949E;
+  --accent: #C9553D;
+  --accent-glow: rgba(201,85,61,0.15);
+  --teal: #2A9D8F;
+  --teal-glow: rgba(42,157,143,0.12);
+  --sand: #E9C46A;
+  --sand-glow: rgba(233,196,106,0.1);
+  --navy: #264653;
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans: 'Source Sans 3', 'Segoe UI', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  line-height: 1.7;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* === HERO === */
+.hero {
+  min-height: 55vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 4rem 2rem;
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 30% 50%, rgba(42,157,143,0.08) 0%, transparent 60%),
+              radial-gradient(ellipse at 70% 50%, rgba(201,85,61,0.06) 0%, transparent 60%);
+}
+
+.hero::before {
+  content: '?';
+  position: absolute;
+  font-size: clamp(6rem, 18vw, 14rem);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.03;
+  pointer-events: none;
+}
+
+.hero-label {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.2s forwards;
+}
+
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(2.5rem, 6vw, 4.2rem);
+  font-weight: 900;
+  line-height: 1.15;
+  margin-bottom: 1rem;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.4s forwards;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--teal);
+}
+
+.hero-sub {
+  font-size: 1.15rem;
+  color: var(--muted);
+  max-width: 600px;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.6s forwards;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* === LAYOUT === */
+.container {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+section {
+  padding: 4rem 0;
+}
+
+section + section {
+  border-top: 1px solid var(--border);
+}
+
+/* === TYPOGRAPHY === */
+h2 {
+  font-family: var(--serif);
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--text);
+}
+
+h2 .num {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+h3 {
+  font-family: var(--sans);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--teal);
+  margin-bottom: 0.75rem;
+  margin-top: 2rem;
+}
+
+p {
+  margin-bottom: 1.2rem;
+  color: var(--muted);
+}
+
+p strong { color: var(--text); font-weight: 600; }
+
+/* === META BAR === */
+.meta-bar {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.4rem 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem 1.75rem;
+  margin-bottom: 2.5rem;
+  font-size: 0.92rem;
+}
+
+.meta-label {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  align-self: center;
+}
+
+.meta-value {
+  color: var(--muted);
+}
+
+/* === DAY DIVIDER === */
+.day-divider {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin: 3rem 0 2rem;
+}
+
+.day-divider .day-tag {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--teal);
+  padding: 0.35rem 1rem;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.day-divider .day-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* === DEFINITION BOX === */
+.definition-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 12px 12px 0;
+  padding: 2rem 2.5rem;
+  margin: 2rem 0;
+}
+
+.definition-box .term {
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.definition-box .etymology {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--accent);
+  margin-bottom: 1rem;
+  letter-spacing: 0.05em;
+}
+
+.definition-box p { color: var(--text); margin-bottom: 0.8rem; }
+
+/* === DISTINCTION / CALLOUT BOX === */
+.distinction {
+  background: linear-gradient(135deg, rgba(201,85,61,0.08), rgba(201,85,61,0.03));
+  border: 1px solid rgba(201,85,61,0.2);
+  border-radius: 12px;
+  padding: 1.75rem 2rem;
+  margin: 2rem 0;
+}
+
+.distinction .label {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+
+/* === TEAL CALLOUT === */
+.teal-callout {
+  background: linear-gradient(135deg, rgba(42,157,143,0.08), rgba(42,157,143,0.03));
+  border: 1px solid rgba(42,157,143,0.2);
+  border-radius: 12px;
+  padding: 1.75rem 2rem;
+  margin: 2rem 0;
+}
+
+.teal-callout .label {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 0.5rem;
+}
+
+/* === SAND CALLOUT (what's left out style) === */
+.sand-callout {
+  background: linear-gradient(135deg, rgba(233,196,106,0.06), rgba(233,196,106,0.02));
+  border: 1px solid rgba(233,196,106,0.2);
+  border-radius: 12px;
+  padding: 2rem 2.25rem;
+  margin: 2.5rem 0;
+}
+
+.sand-callout .label {
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--sand);
+  margin-bottom: 0.75rem;
+}
+
+/* === CASE STUDY BOX === */
+.case-study {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2.5rem;
+  margin: 2rem 0;
+}
+
+.case-study .cs-label {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--sand);
+  margin-bottom: 0.5rem;
+}
+
+.case-study .cs-title {
+  font-family: var(--serif);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 1rem;
+}
+
+/* === TABLE === */
+.impact-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 1.5rem 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.impact-table thead th {
+  background: var(--navy);
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.9rem 1.2rem;
+  text-align: left;
+}
+
+.impact-table tbody td {
+  padding: 0.85rem 1.2rem;
+  font-size: 0.92rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+  vertical-align: top;
+}
+
+.impact-table tbody tr:last-child td { border-bottom: none; }
+.impact-table tbody tr:nth-child(even) { background: rgba(255,255,255,0.015); }
+.impact-table td strong { color: var(--text); }
+.impact-table td em { color: var(--sand); font-style: normal; }
+
+/* === TASK SECTION (expandable) === */
+.task-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  margin: 2rem 0;
+}
+
+.task-header {
+  padding: 1.5rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.task-header:hover { background: rgba(255,255,255,0.02); }
+
+.task-level {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.75rem;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.task-level.wed { background: rgba(42,157,143,0.15); color: var(--teal); }
+.task-level.thu { background: rgba(233,196,106,0.15); color: var(--sand); }
+
+.task-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--text);
+  flex: 1;
+}
+
+.task-arrow {
+  color: var(--muted);
+  font-size: 0.85rem;
+  transition: transform 0.3s;
+}
+
+.task-section.open .task-arrow { transform: rotate(180deg); }
+
+.task-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.task-section.open .task-body { max-height: 3000px; }
+
+.task-body-inner {
+  padding: 0 2rem 2rem;
+  border-top: 1px solid var(--border);
+}
+
+.task-body-inner h4 {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--teal);
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.task-body-inner ol, .task-body-inner ul {
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.task-body-inner li {
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.task-body-inner li strong { color: var(--text); }
+
+/* === SCAFFOLD === */
+.scaffold {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.5rem 1.75rem;
+  margin: 1.25rem 0;
+}
+
+.scaffold .sc-label {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--sand);
+  margin-bottom: 0.75rem;
+}
+
+.scaffold ol li {
+  font-size: 0.92rem;
+  margin-bottom: 0.6rem;
+}
+
+/* === SOURCE LINK === */
+.source-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--teal);
+  text-decoration: none;
+  font-size: 0.9rem;
+  padding: 0.4rem 0.9rem;
+  background: var(--teal-glow);
+  border-radius: 6px;
+  margin: 0.25rem 0.25rem 0.25rem 0;
+  transition: background 0.2s;
+}
+
+.source-link:hover { background: rgba(42,157,143,0.2); }
+
+/* === FOOTER === */
+footer {
+  text-align: center;
+  padding: 3rem 2rem;
+  border-top: 1px solid var(--border);
+}
+
+footer p {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 640px) {
+  .container { padding: 0 1.25rem; }
+  .hero { padding: 3rem 1.5rem; min-height: 45vh; }
+  .definition-box, .case-study, .sand-callout { padding: 1.5rem; }
+  .task-header { padding: 1.25rem 1.5rem; }
+  .task-body-inner { padding: 0 1.5rem 1.5rem; }
+  .impact-table { font-size: 0.85rem; }
+  .impact-table thead th, .impact-table tbody td { padding: 0.7rem 0.8rem; }
+  .meta-bar { grid-template-columns: 1fr; gap: 0.3rem 0; }
+}
+
+/* === L4 additions (same palette) === */
+.qtype-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.5rem 0}
+.qtype{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.4rem 1.4rem 1.2rem;border-top:3px solid var(--teal)}
+.qtype.c{border-top-color:var(--sand)} .qtype.d{border-top-color:var(--accent)}
+.qt-label{font-family:var(--mono);font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:var(--teal);margin-bottom:.6rem}
+.qtype.c .qt-label{color:var(--sand)} .qtype.d .qt-label{color:var(--accent)}
+.qt-def{font-size:.95rem;margin-bottom:.8rem} .qt-ex{font-family:var(--serif);font-style:italic;color:var(--text);font-size:1rem;margin-bottom:0}
+.sort-wrap{margin:2rem 0}
+.deck{display:flex;flex-wrap:wrap;gap:.6rem;min-height:3rem;padding:1rem;background:var(--surface);border:1px dashed rgba(255,255,255,.12);border-radius:12px;margin-bottom:1.25rem}
+.deck:empty::after{content:'All cards placed. Check your sort below.';color:var(--muted);font-size:.9rem}
+.qcard{font-family:var(--sans);font-size:.92rem;line-height:1.4;text-align:left;color:var(--text);background:var(--surface2);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:.65rem .85rem;cursor:pointer;max-width:100%;transition:border-color .15s,background .15s,transform .15s}
+.qcard:hover{border-color:rgba(255,255,255,.25)}
+.qcard:focus-visible,.bin:focus-visible,.fix:focus-visible,.btn:focus-visible{outline:2px solid var(--sand);outline-offset:2px}
+.qcard.sel{border-color:var(--sand);background:rgba(233,196,106,.12);transform:translateY(-2px)}
+.qcard.own{border-style:dashed}
+.qcard .mark{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;margin-left:.5rem;padding:.1rem .4rem;border-radius:4px}
+.qcard.right{border-color:rgba(42,157,143,.6)} .qcard.right .mark{background:var(--teal-glow);color:var(--teal)}
+.qcard.wrong{border-color:rgba(201,85,61,.6)} .qcard.wrong .mark{background:var(--accent-glow);color:var(--accent)}
+.qcard.trap{border-color:rgba(233,196,106,.7)} .qcard.trap .mark{background:var(--sand-glow);color:var(--sand)}
+.qcard.discuss .mark{background:rgba(255,255,255,.06);color:var(--muted)}
+.bins{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.bin{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem;min-height:9rem;cursor:pointer;transition:border-color .15s,background .15s}
+.bin.ready{border-color:rgba(233,196,106,.45);background:rgba(233,196,106,.04)}
+.bin-label{font-family:var(--mono);font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.75rem;color:var(--teal)}
+.bin-label.c{color:var(--sand)} .bin-label.d{color:var(--accent)}
+.bin-cards{display:flex;flex-direction:column;gap:.5rem}
+.own-row{display:flex;gap:.6rem;margin:1.25rem 0 .75rem}
+.own-row input{flex:1;background:var(--surface);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:var(--text);font-family:var(--sans);font-size:.95rem;padding:.6rem .8rem}
+.sort-actions{display:flex;flex-wrap:wrap;align-items:center;gap:.75rem;margin-top:.5rem}
+.btn{font-family:var(--sans);font-weight:700;font-size:.95rem;color:#fff;background:var(--accent);border:none;border-radius:8px;padding:.65rem 1.2rem;cursor:pointer;min-height:44px}
+.btn:hover{filter:brightness(1.1)}
+.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,.18);color:var(--text)}
+.sort-status{font-family:var(--mono);font-size:.8rem;color:var(--sand)}
+.fb{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--sand);border-radius:0 12px 12px 0;padding:1.1rem 1.4rem;margin-top:1rem}
+.fb .fb-q{font-family:var(--serif);font-style:italic;color:var(--text);margin-bottom:.35rem}
+.fb p{margin-bottom:0;font-size:.93rem}
+.checks{display:grid;gap:.7rem;margin:1.5rem 0}
+.check{display:flex;gap:1rem;align-items:flex-start;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem 1.25rem;color:var(--muted);font-size:.97rem}
+.check strong{color:var(--text)}
+.ck-num{font-family:var(--mono);font-size:.8rem;color:var(--bg);background:var(--teal);border-radius:50%;width:1.7rem;height:1.7rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fix{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.4rem;margin:.8rem 0;cursor:pointer}
+.fix-weak{font-family:var(--serif);font-style:italic;color:var(--text);font-size:1.05rem}
+.fix-strong{display:none;margin-top:.9rem;padding-top:.9rem;border-top:1px solid var(--border);font-family:var(--serif);font-style:italic;color:var(--text);font-size:1.05rem}
+.fix.open .fix-strong{display:block}
+.fix-why{font-family:var(--sans);font-style:normal;font-size:.92rem;margin:.6rem 0 0}
+.fix::after{content:'Tap to reveal a stronger version';display:block;font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:.6rem}
+.fix.open::after{content:''}
+.tag{font-family:var(--mono);font-style:normal;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .5rem;border-radius:4px;margin-right:.7rem;vertical-align:middle}
+.tag.weak{background:var(--accent-glow);color:var(--accent)} .tag.strong{background:var(--teal-glow);color:var(--teal)}
+.funnel{display:flex;flex-direction:column;align-items:center;gap:.35rem;margin-top:1rem}
+.fn{width:var(--w);background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:.55rem .9rem;text-align:center;color:var(--text);font-size:.93rem}
+.fn span{font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--sand);margin-right:.6rem}
+@media (max-width:700px){.qtype-grid,.bins{grid-template-columns:1fr}.fn{width:100%}}
+</style>
+</head>
+<body>
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-label">Vanishing Points · MYP4 I&amp;S · Week 1 · Lesson 4</div>
+  <h1>Asking <em>Better</em> Questions</h1>
+  <p class="hero-sub">Every investigation starts with a question, and a bad question can pick the villain before you’ve looked at a single source.</p>
+</header>
+
+<!-- OVERVIEW -->
+<section>
+  <div class="container">
+    <div class="meta-bar">
+      <span class="meta-label">Content</span>
+      <span class="meta-value">How does the way we ask a question shape what we find?</span>
+      <span class="meta-label">Skills</span>
+      <span class="meta-value">Formulating research questions (Criterion B)</span>
+      <span class="meta-label">Session</span>
+      <span class="meta-value">Lesson 4: Question sort → Can you research it? → Your turn</span>
+    </div>
+
+    <h2><span class="num">01</span>Three Kinds of Question</h2>
+    <p>This week you’ve met three cases: <em>The Lorax</em>, the Aral Sea and Easter Island. You’ve also written your own questions in the 3, 2, 1 Bridge. Not all questions do the same job, and an investigation needs to know which kind it’s asking.</p>
+
+    <div class="qtype-grid">
+      <div class="qtype f">
+        <div class="qt-label">Factual</div>
+        <p class="qt-def">The answer can be <strong>looked up</strong> and checked. There is one right answer.</p>
+        <p class="qt-ex">“How much did the Aral Sea shrink?”</p>
+      </div>
+      <div class="qtype c">
+        <div class="qt-label">Conceptual</div>
+        <p class="qt-def">It <strong>explains a pattern</strong> that shows up in more than one case.</p>
+        <p class="qt-ex">“Why do shared resources get overused?”</p>
+      </div>
+      <div class="qtype d">
+        <div class="qt-label">Debatable</div>
+        <p class="qt-def">Reasonable people <strong>disagree</strong>, and they argue using evidence.</p>
+        <p class="qt-ex">“Who was most to blame for Rapa Nui’s lost forest?”</p>
+      </div>
+    </div>
+
+    <div class="teal-callout">
+      <div class="label">You’ve seen these before</div>
+      <p style="margin-bottom:0;">Every MYP unit is built on one factual, one conceptual and one debatable question. This unit asks: <strong>What role do humans have in environmental destruction?</strong> · <strong>What role does equity play in conservation and resource management?</strong> · <strong>Can technological innovation alone solve the environmental challenges we face?</strong> Can you tell which is which?</p>
+    </div>
+  </div>
+</section>
+
+<!-- CARD SORT -->
+<section>
+  <div class="container">
+    <h2><span class="num">02</span>The Question Sort</h2>
+    <p>Work in pairs. <strong>Tap a card</strong>, then <strong>tap the box</strong> you think it belongs in. Tap a placed card to send it back. When every card is placed, check your sort. Some cards are trickier than they look, so argue about those ones before you check.</p>
+
+    <div class="sort-wrap">
+      <div class="deck" id="deck" aria-label="Question cards to sort"></div>
+      <div class="bins">
+        <div class="bin" data-bin="F" tabindex="0" role="button" aria-label="Factual box"><div class="bin-label f">Factual</div><div class="bin-cards"></div></div>
+        <div class="bin" data-bin="C" tabindex="0" role="button" aria-label="Conceptual box"><div class="bin-label c">Conceptual</div><div class="bin-cards"></div></div>
+        <div class="bin" data-bin="D" tabindex="0" role="button" aria-label="Debatable box"><div class="bin-label d">Debatable</div><div class="bin-cards"></div></div>
+      </div>
+      <div class="own-row">
+        <input type="text" id="ownQ" placeholder="Add a question from your 3, 2, 1 Bridge…" aria-label="Add your own question">
+        <button class="btn ghost" id="addOwn">Add card</button>
+      </div>
+      <div class="sort-actions">
+        <button class="btn" id="checkSort">Check my sort</button>
+        <button class="btn ghost" id="resetSort">Start again</button>
+        <span class="sort-status" id="sortStatus" aria-live="polite"></span>
+      </div>
+      <div id="sortFeedback"></div>
+    </div>
+
+    <div class="distinction" id="afterSort">
+      <div class="label">After you check: put three cards side by side</div>
+      <p style="margin-bottom:0;">Find the three cards about <strong>Rapa Nui’s forest</strong>. They ask about the same thing in three different ways. Which one could you actually investigate? Which one has already decided the answer? What does that tell you about how <strong>the way you ask shapes what you find</strong>?</p>
+    </div>
+  </div>
+</section>
+
+<!-- RESEARCHABLE -->
+<section>
+  <div class="container">
+    <h2><span class="num">03</span>Can You Actually Research It?</h2>
+    <p>A good research question isn’t just interesting. It has to be <strong>answerable</strong>, with sources you can actually find. Test every question against these four checks.</p>
+
+    <div class="checks">
+      <div class="check"><span class="ck-num">1</span><div><strong>One issue.</strong> Not “the environment”: one resource, one biome, one problem.</div></div>
+      <div class="check"><span class="ck-num">2</span><div><strong>A clear place or scale.</strong> Where? Individual, local or global?</div></div>
+      <div class="check"><span class="ck-num">3</span><div><strong>It doesn’t assume its answer.</strong> If the question already names the villain, it isn’t an investigation.</div></div>
+      <div class="check"><span class="ck-num">4</span><div><strong>It can be answered with 4–6 good sources.</strong> Too big and you drown; too small and there’s nothing to find.</div></div>
+    </div>
+
+    <div class="sand-callout">
+      <div class="label">A loaded question is a narrative in disguise.</div>
+      <p style="margin-bottom:0;">On Thursday you told Easter Island’s story from inside one narrative, with one villain. That’s fine for a story. But if your <em>research question</em> picks the villain, every source you find will look like proof. Research questions stay open, and the evidence decides.</p>
+    </div>
+
+    <h3>Weak → stronger: tap to fix</h3>
+    <p>Decide what’s wrong with each weak question <strong>before</strong> you reveal a stronger version.</p>
+
+    <div class="fix" tabindex="0" role="button" aria-expanded="false">
+      <div class="fix-weak"><span class="tag weak">Weak</span>“Why did the islanders destroy their island?”</div>
+      <div class="fix-strong"><span class="tag strong">Stronger</span>“How far do rats, rather than people, explain the loss of Rapa Nui’s palm forest?”<p class="fix-why">Fails check 3: it blames the islanders before looking at the evidence. The stronger version names two explanations and lets the evidence weigh them.</p></div>
+    </div>
+    <div class="fix" tabindex="0" role="button" aria-expanded="false">
+      <div class="fix-weak"><span class="tag weak">Weak</span>“What happened to the Aral Sea?”</div>
+      <div class="fix-strong"><span class="tag strong">Stronger</span>“How has the shrinking of the Aral Sea affected the health of people living near its former shoreline since 1990?”<p class="fix-why">Fails checks 1 and 4: it asks for the whole story, so there’s no focus. The stronger version picks one impact, one group of people and a timeframe.</p></div>
+    </div>
+    <div class="fix" tabindex="0" role="button" aria-expanded="false">
+      <div class="fix-weak"><span class="tag weak">Weak</span>“Is deforestation bad?”</div>
+      <div class="fix-strong"><span class="tag strong">Stronger</span>“Who has benefited most, and who has lost most, from palm oil expansion in Borneo since 2000?”<p class="fix-why">Fails checks 1, 2 and 3: no place, no focus, and the answer is assumed. The stronger version is still debatable, but it points you towards evidence about real people.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLKIT -->
+<section>
+  <div class="container">
+    <h2><span class="num">04</span>Your Research Question Toolkit</h2>
+    <p>Come back to this section next week, when you choose your own issue and write your first research question.</p>
+
+    <div class="task-section" onclick="toggleTask(this)">
+      <div class="task-header">
+        <span class="task-level wed">Toolkit</span>
+        <span class="task-title">The funnel: from topic to question</span>
+        <span class="task-arrow">▼</span>
+      </div>
+      <div class="task-body"><div class="task-body-inner">
+        <p>Most weak questions are just <strong>topics with a question mark</strong>. Narrow down one step at a time:</p>
+        <div class="funnel">
+          <div class="fn" style="--w:100%"><span>Topic</span>Coral reefs</div>
+          <div class="fn" style="--w:86%"><span>Issue</span>Coral bleaching</div>
+          <div class="fn" style="--w:72%"><span>Place</span>Southern Thailand</div>
+          <div class="fn" style="--w:58%"><span>Angle</span>The role of tourism</div>
+          <div class="fn" style="--w:44%"><span>Time</span>Since 2000</div>
+        </div>
+        <p style="margin-top:1rem;">→ “<strong>To what extent</strong> has tourism contributed to coral reef decline in southern Thailand since 2000?”</p>
+      </div></div>
+    </div>
+
+    <div class="task-section" onclick="toggleTask(this)">
+      <div class="task-header">
+        <span class="task-level wed">Toolkit</span>
+        <span class="task-title">Question starters: which work, which don’t</span>
+        <span class="task-arrow">▼</span>
+      </div>
+      <div class="task-body"><div class="task-body-inner">
+        <table class="impact-table">
+          <thead><tr><th>Try these</th><th>Be careful with these</th></tr></thead>
+          <tbody>
+            <tr><td><strong>To what extent…</strong> (weighs a cause)</td><td><strong>Why is X destroying Y…</strong> (assumes the answer)</td></tr>
+            <tr><td><strong>How has… changed / affected…</strong></td><td><strong>Is X good / bad?</strong> (too broad, opinion only)</td></tr>
+            <tr><td><strong>Who has benefited, and who has lost…</strong></td><td><strong>What is…?</strong> (usually factual; there’s nothing to investigate)</td></tr>
+            <tr><td><strong>How far does… explain…</strong></td><td><strong>What if…?</strong> (interesting, but hard to research with sources)</td></tr>
+          </tbody>
+        </table>
+      </div></div>
+    </div>
+
+    <div class="task-section" onclick="toggleTask(this)">
+      <div class="task-header">
+        <span class="task-level wed">Toolkit</span>
+        <span class="task-title">Why does it matter? Justifying your question</span>
+        <span class="task-arrow">▼</span>
+      </div>
+      <div class="task-body"><div class="task-body-inner">
+        <p>A research question also needs a reason to exist. Use the lens you know from the 3Ys:</p>
+        <ul>
+          <li><strong>Individual:</strong> why does this matter to people’s daily lives, health or choices?</li>
+          <li><strong>Local:</strong> why does this matter to a community or a place?</li>
+          <li><strong>Global:</strong> why does this matter beyond one country?</li>
+        </ul>
+        <p><strong>Justify</strong> means giving a reason <em>and</em> evidence, such as one fact from a source, not just “because it’s important.”</p>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- YOUR TURN -->
+<section>
+  <div class="container">
+    <h2><span class="num">05</span>Your Turn</h2>
+    <div class="task-section open" onclick="toggleTask(this)">
+      <div class="task-header">
+        <span class="task-level thu">Lesson 4</span>
+        <span class="task-title">Write, test, improve (on paper)</span>
+        <span class="task-arrow">▼</span>
+      </div>
+      <div class="task-body"><div class="task-body-inner">
+        <p>Write these <strong>on paper</strong>. The thinking is the point, so keep it in your own handwriting.</p>
+        <ol>
+          <li><strong>Formulate</strong> three questions about one of this week’s cases: one <strong>factual</strong>, one <strong>conceptual</strong>, one <strong>debatable</strong>.</li>
+          <li>Take your debatable question and test it against the <strong>four checks</strong>. Which does it fail?</li>
+          <li>Rewrite it until it passes all four. Keep both versions so you can see what changed.</li>
+        </ol>
+        <div class="scaffold">
+          <div class="sc-label">Exit question</div>
+          <p style="margin-bottom:0;color:var(--text);">Which of your questions could you actually research, and why?</p>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="distinction">
+      <div class="label">Next week</div>
+      <p style="margin-bottom:0;">You’ll choose your own issue for the summative and write your first real research question. Bring today’s rewrite; it’s your practice run.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Vanishing Points · MYP4 I&amp;S</p>
+</footer>
+
+<script>
+function toggleTask(el){document.querySelectorAll('.task-section').forEach(t=>{if(t!==el)t.classList.remove('open')});el.classList.toggle('open');}
+const CARDS=[
+ {q:'How much of its original size has the Aral Sea lost?',a:'F'},
+ {q:'Which rivers were diverted away from the Aral Sea, and what for?',a:'F'},
+ {q:'When did European ships first reach Rapa Nui?',a:'F'},
+ {q:'How many moai have been found on Rapa Nui?',a:'F'},
+ {q:'Why do shared resources tend to get overused?',a:'C'},
+ {q:'How does isolation change the way a community manages its resources?',a:'C'},
+ {q:'Why do people tell different stories about the same environmental disaster?',a:'C'},
+ {q:'How do decisions made far away affect the people who live with the consequences?',a:'C'},
+ {q:'Who was most to blame for Rapa Nui’s lost forest?',a:'D'},
+ {q:'Was The Lorax fair to the Once-ler?',a:'D'},
+ {q:'Should the international community pay to restore the Aral Sea?',a:'D'},
+ {q:'Is economic growth worth some environmental damage?',a:'D'},
+ {q:'Why did the islanders destroy their island?',a:'TRAP',note:'This one’s a trap. It <strong>looks</strong> conceptual, but it has already decided the answer: the islanders did it. That’s Narrative 1’s villain, chosen before any evidence. It isn’t really any of the three types, because it isn’t an open question. Section 03 shows how to fix it.'},
+ {q:'Did rats cause the deforestation of Rapa Nui?',a:'D',note:'It <strong>sounds</strong> factual: it’s a yes/no question. But researchers genuinely disagree about the answer, so it’s actually <strong>debatable</strong>. A factual-sounding question isn’t always a settled one.'},
+ {q:'What if the Soviet planners had consulted local fishermen?',a:'D',note:'A “What if…?” question is usually <strong>debatable</strong>. Nobody can check what would have happened, so any answer depends on evidence and judgement. Interesting to argue, but hard to research with sources.'}
+];
+const NAMES={F:'Factual',C:'Conceptual',D:'Debatable'};
+let selected=null;const deck=document.getElementById('deck');
+function mk(c,i){const b=document.createElement('button');b.className='qcard'+(c.own?' own':'');b.type='button';b.dataset.i=i;b.innerHTML='<span class="qt"></span>';b.querySelector('.qt').textContent=c.q;
+ b.addEventListener('click',e=>{e.stopPropagation();clearMarks();if(b.parentElement!==deck){if(selected&&selected!==b){place(b.closest('.bin'));return;}deck.appendChild(b);select(null);return;}select(selected===b?null:b);});return b;}
+function select(b){if(selected)selected.classList.remove('sel');selected=b;if(b)b.classList.add('sel');document.querySelectorAll('.bin').forEach(x=>x.classList.toggle('ready',!!b));}
+function place(bin){if(!selected)return;clearMarks();bin.querySelector('.bin-cards').appendChild(selected);select(null);}
+document.querySelectorAll('.bin').forEach(bin=>{bin.addEventListener('click',()=>place(bin));bin.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();place(bin);}});});
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function build(){deck.innerHTML='';document.querySelectorAll('.bin-cards').forEach(x=>x.innerHTML='');document.getElementById('sortFeedback').innerHTML='';document.getElementById('sortStatus').textContent='';select(null);
+ shuffle(CARDS.map((c,i)=>i)).forEach(i=>deck.appendChild(mk(CARDS[i],i)));}
+function clearMarks(){document.querySelectorAll('.qcard').forEach(c=>{c.classList.remove('right','wrong','trap','discuss');const m=c.querySelector('.mark');if(m)m.remove();});document.getElementById('sortFeedback').innerHTML='';document.getElementById('sortStatus').textContent='';}
+function mark(el,cls,txt){el.classList.add(cls);const m=document.createElement('span');m.className='mark';m.textContent=txt;el.appendChild(m);}
+document.getElementById('checkSort').addEventListener('click',()=>{clearMarks();const st=document.getElementById('sortStatus');
+ if(deck.querySelector('.qcard')){st.textContent='Place every card first.';return;}
+ let right=0,total=0;const notes=[];
+ document.querySelectorAll('.bin').forEach(bin=>{const b=bin.dataset.bin;bin.querySelectorAll('.qcard').forEach(el=>{const c=CARDS[el.dataset.i];
+  if(c.own){mark(el,'discuss','your call: discuss');return;}
+  if(c.a==='TRAP'){mark(el,'trap','⚠ trap card');notes.push(c);return;}
+  total++;if(c.a===b){right++;mark(el,'right','✓');}else{mark(el,'wrong','think again');}
+  if(c.note&&c.a!=='TRAP')notes.push(c);});});
+ st.textContent=right+' of '+total+' standard cards sorted as expected';
+ const fb=document.getElementById('sortFeedback');notes.forEach(c=>{const d=document.createElement('div');d.className='fb';d.innerHTML='<div class="fb-q"></div><p>'+c.note+'</p>';d.querySelector('.fb-q').textContent='“'+c.q+'”';fb.appendChild(d);});});
+document.getElementById('resetSort').addEventListener('click',()=>{CARDS.splice(0,CARDS.length,...CARDS.filter(c=>!c.own));build();});
+document.getElementById('addOwn').addEventListener('click',()=>{const inp=document.getElementById('ownQ');const v=inp.value.trim();if(!v)return;CARDS.push({q:v,own:true});deck.appendChild(mk(CARDS[CARDS.length-1],CARDS.length-1));inp.value='';clearMarks();});
+document.getElementById('ownQ').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('addOwn').click();});
+document.querySelectorAll('.fix').forEach(f=>{const t=()=>{f.classList.toggle('open');f.setAttribute('aria-expanded',f.classList.contains('open'));};f.addEventListener('click',t);f.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();t();}});});
+build();
+
+</script>
+</body>
+</html>
